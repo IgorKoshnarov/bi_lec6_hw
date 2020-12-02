@@ -1,0 +1,15 @@
+{application, lct6_cache,
+ [{description, "An example cache application, can be used by other erlang application as dependency"},
+  {vsn, "0.1.0"},
+  {registered, [cache_server]},
+  {mod, {lct6_cache_app, []}},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, [lct6_cache_app, lct6_cache_sup, cache_server, cache_tables_manager]},
+
+  {licenses, ["Apache 2.0"]},
+  {links, []}
+ ]}.
