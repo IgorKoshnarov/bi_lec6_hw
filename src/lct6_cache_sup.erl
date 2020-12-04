@@ -26,13 +26,18 @@ start_link() ->
 %%                  type => worker(),       % optional
 %%                  modules => modules()}   % optional
 init([]) ->
+    Options = case application:get_env(lct6_cache, drop_interval) of
+        undefined -> [];
+        {ok, Value} when is_integer(Value) -> [{drop_interval, Value}];
+        {ok, Value} -> [{drop_interval, list_to_integer(Value)}]
+    end,
     SupFlags = #{strategy => one_for_all,
-                 intensity => 0,
-                 period => 1},
+                 intensity => 1,
+                 period => 5},
     ChildSpecs = [
         #{
             id => cache_server,
-            start => {cache_server, start_link, [[]]},
+            start => {cache_server, start_link, [Options]},
             restart => permanent,
             shutdown => 5000,
             type => worker,

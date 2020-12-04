@@ -11,10 +11,11 @@ all() -> [
 ].
 
 groups() -> [
-    % {api, [sequence], [new_test, insert_test, lookup_test, lookup_by_date_test]}
+    % {api, [sequence], [new_test, insert_test, lookup_test]}
 ].
 
 init_per_suite(Config) ->
+    % gen_server:start({local, cache_server}, cache_server, [{drop_interval, 10}], []),
     Config.
 
 end_per_suite(_Config) ->
