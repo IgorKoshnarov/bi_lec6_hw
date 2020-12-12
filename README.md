@@ -1,4 +1,4 @@
-lct6_cache
+cache
 =====
 
 An OTP application

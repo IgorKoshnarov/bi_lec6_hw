@@ -41,16 +41,16 @@ api_test(_Config) ->
     [cache_server:insert(numbers, Key, Value, LifeTime) 
     || #{key := Key, value := Value, lifetime := LifeTime} <- data_samples()],
     FirstInsertTime = calendar:universal_time(),
-    [1, 2, 3, 4] = [cache_server:lookup(numbers, Key) || #{key := Key} <- data_samples()],
+    [{ok, 1}, {ok, 2}, {ok, 3}, {ok, 4}] = [cache_server:lookup(numbers, Key) || #{key := Key} <- data_samples()],
     timer:sleep(2000),
-    [undefined, undefined, 3, 4] = [cache_server:lookup(numbers, Key) || #{key := Key} <- data_samples()],
+    [{ok, undefined}, {ok, undefined}, {ok, 3}, {ok, 4}] = [cache_server:lookup(numbers, Key) || #{key := Key} <- data_samples()],
     [cache_server:insert(numbers, Key, Value, LifeTime) 
     || #{key := Key, value := Value, lifetime := LifeTime} <- data_samples1()],
     Now = calendar:universal_time(),
     Seconds = calendar:datetime_to_gregorian_seconds(FirstInsertTime),
     SecondAfterInsertTime = calendar:gregorian_seconds_to_datetime(Seconds + 1),
-    Result1 = cache_server:lookup_by_date(numbers, FirstInsertTime, Now),
-    Result2 = cache_server:lookup_by_date(numbers, SecondAfterInsertTime, Now),
+    {ok, Result1} = cache_server:lookup_by_date(numbers, FirstInsertTime, Now),
+    {ok, Result2} = cache_server:lookup_by_date(numbers, SecondAfterInsertTime, Now),
     true = lists:member({3, 3}, Result1),
     true = lists:member({4, 4}, Result1),
     true = lists:member({5, 5}, Result1),
@@ -60,7 +60,7 @@ api_test(_Config) ->
     4 = length(Result1),
     2 = length(Result2),
     timer:sleep(6000),
-    Result3 = cache_server:lookup_by_date(numbers, FirstInsertTime, Now),
+    {ok, Result3} = cache_server:lookup_by_date(numbers, FirstInsertTime, Now),
     2 = length(Result3).        
 
 % new_test(_Config) ->

@@ -1,9 +1,9 @@
 %%%-------------------------------------------------------------------
-%% @doc lct6_cache top level supervisor.
+%% @doc cache top level supervisor.
 %% @end
 %%%-------------------------------------------------------------------
 
--module(lct6_cache_sup).
+-module(cache_sup).
 
 -behaviour(supervisor).
 
@@ -26,7 +26,7 @@ start_link() ->
 %%                  type => worker(),       % optional
 %%                  modules => modules()}   % optional
 init([]) ->
-    Options = case application:get_env(lct6_cache, drop_interval) of
+    Options = case application:get_env(cache, drop_interval) of
         undefined -> [];
         {ok, Value} when is_integer(Value) -> [{drop_interval, Value}];
         {ok, Value} -> [{drop_interval, list_to_integer(Value)}]

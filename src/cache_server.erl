@@ -58,7 +58,7 @@ handle_call({lookup, TableName, Key}, _From, #{table_names := TableNames} = Stat
     case lists:member(TableName, TableNames) of
         false -> {reply, undefined, State};
         _ -> case ets:lookup(TableName, Key) of
-            [Value] -> {reply, not_expired(Value), State};
+            [Value] -> {reply, {ok, not_expired(Value)}, State};
             _ -> {reply, undefined, State}
         end
     end;
@@ -66,7 +66,7 @@ handle_call({lookup, TableName, Key}, _From, #{table_names := TableNames} = Stat
 handle_call({lookup_by_date, TableName, DateFrom, DateTo}, _From, #{table_names := TableNames} = State) ->
     case lists:member(TableName, TableNames) of
         false -> {reply, undefined, State};
-        _ -> {reply, do_lookup_by_date(TableName, DateFrom, DateTo), State}
+        _ -> {reply, {ok, do_lookup_by_date(TableName, DateFrom, DateTo)}, State}
     end.
 
 handle_info(clean, State) ->
